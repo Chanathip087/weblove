@@ -13,6 +13,13 @@
 
 <body>
 
+    <!-- Aurora Soft Glow Blobs -->
+    <div id="aurora-blobs">
+        <div class="aurora-blob aurora-blob--pink"></div>
+        <div class="aurora-blob aurora-blob--purple"></div>
+        <div class="aurora-blob aurora-blob--peach"></div>
+    </div>
+
     <!-- ========================================
          Loading Screen
          ======================================== -->
@@ -161,7 +168,7 @@
                         <div class="gift-box-content">
                             <h3>กล่องคูปอง</h3>
                             <p>เนื่องในโอกาสครบรอบ 1 ปี เค้าขอมอบ "คูปอง" ให้เทอ 3 ใบ</p>
-                            <div class="coupon-ticket">
+                            <div class="coupon-ticket" data-coupon="sorry">
                                 <div class="coupon-left">
                                     <span class="coupon-emoji">🥺</span>
                                 </div>
@@ -169,9 +176,10 @@
                                 <div class="coupon-right">
                                     <h4>คูปองง้อ</h4>
                                     <p>ถ้าเค้าเริ่มงอนเมื่อไหร่ ยื่นใบนี้มา เค้าจะหายงอนเรยเจ๋งป่ะล่ะ</p>
+                                    <span class="coupon-serial">WL-001</span>
                                 </div>
                             </div>
-                            <div class="coupon-ticket">
+                            <div class="coupon-ticket" data-coupon="food">
                                 <div class="coupon-left">
                                     <span class="coupon-emoji">🍜</span>
                                 </div>
@@ -179,9 +187,10 @@
                                 <div class="coupon-right">
                                     <h4>คูปองเลี้ยงข้าวฟรี</h4>
                                     <p>อยากกินอารัยดั่ยหมด ยื่นมาเลย เดะเลี้ยงงับ</p>
+                                    <span class="coupon-serial">WL-002</span>
                                 </div>
                             </div>
-                            <div class="coupon-ticket">
+                            <div class="coupon-ticket" data-coupon="hug">
                                 <div class="coupon-left">
                                     <span class="coupon-emoji">🤗</span>
                                 </div>
@@ -189,6 +198,7 @@
                                 <div class="coupon-right">
                                     <h4>คูปองกอดชาร์จพลัง</h4>
                                     <p>ใช้ได้ไม่จำกัดครั้ง ห้าห้าห้าาห้า</p>
+                                    <span class="coupon-serial">WL-003</span>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +256,7 @@
                 </div>
                 <div class="flip-card">
                     <div class="flip-card-inner">
-                        <div class="flip-card-front">😂</div>
+                        <div class="flip-card-front">😍</div>
                         <div class="flip-card-back">เพาะเทอนิสัยดี เรียนร้อยด้วยย</div>
                     </div>
                 </div>
@@ -279,8 +289,12 @@
             <button class="ticket-close" id="ticketClose">&times;</button>
             <div class="ticket">
                 <div class="ticket-main">
+                    <div class="ticket-corner ticket-corner--tl"></div>
+                    <div class="ticket-corner ticket-corner--tr"></div>
+                    <div class="ticket-corner ticket-corner--bl"></div>
+                    <div class="ticket-corner ticket-corner--br"></div>
                     <div class="ticket-header">
-                        <span class="ticket-badge">COUPON</span>
+                        <span class="ticket-badge">WEBLOVE COUPON</span>
                         <h2 class="ticket-title" id="ticketTitle"></h2>
                     </div>
                     <div class="ticket-body">
@@ -290,7 +304,7 @@
                     <div class="ticket-footer">
                         <div class="ticket-info">
                             <span>VALID</span>
-                            <strong>2026</strong>
+                            <strong>ตลอดไป</strong>
                         </div>
                         <div class="ticket-info">
                             <span>FROM</span>
@@ -301,6 +315,8 @@
                             <strong>แก</strong>
                         </div>
                     </div>
+                    <div class="ticket-serial" id="ticketSerial">WL-000000</div>
+                    <div class="torn-edge-main" id="tornEdgeMain"></div>
                 </div>
                 <div class="ticket-perforation" id="ticketPerforation">
                     <div class="tear-progress" id="tearProgress"></div>
@@ -310,6 +326,7 @@
                     </div>
                 </div>
                 <div class="ticket-stub" id="ticketStub">
+                    <div class="torn-edge-stub" id="tornEdgeStub"></div>
                     <div class="stub-content">
                         <span class="stub-emoji" id="stubEmoji"></span>
                         <div class="stub-text">
@@ -317,6 +334,7 @@
                             <strong id="stubCode"></strong>
                         </div>
                     </div>
+                    <span class="stub-tear-mark">KEEP THIS</span>
                 </div>
             </div>
         </div>
