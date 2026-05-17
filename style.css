@@ -665,108 +665,530 @@ body {
 .gift-boxes {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 40px;
     flex-wrap: wrap;
 }
 
 .gift-box {
-    width: 260px;
+    width: 280px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease, filter 0.3s ease;
+    filter: drop-shadow(0 8px 20px rgba(255, 117, 143, 0.25));
 }
 
-.gift-box:hover { transform: translateY(-5px); }
-.gift-box.opened { cursor: default; }
-.gift-box.opened:hover { transform: none; }
+.gift-box:hover {
+    transform: translateY(-8px) scale(1.02);
+    filter: drop-shadow(0 15px 35px rgba(255, 117, 143, 0.4));
+}
 
+/* Lid */
 .gift-box-lid {
     width: 100%;
-    height: 55px;
-    background: linear-gradient(135deg, #ff9ec4, #ff758f);
-    border-radius: 15px 15px 5px 5px;
+    height: 50px;
+    background: linear-gradient(135deg, #ffc8dd, #ffafcc, #ff9ec4);
+    border-radius: 20px 20px 0 0;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
     transform-origin: bottom center;
     z-index: 2;
-    box-shadow: 0 4px 15px rgba(255, 117, 143, 0.3);
+    box-shadow:
+        0 6px 20px rgba(255, 175, 204, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
 }
 
 .gift-box.opened .gift-box-lid {
-    transform: translateY(-80px) rotateX(120deg) scale(0.8);
+    transform: translateY(-90px) rotateX(130deg) scale(0.7);
     opacity: 0;
 }
 
+/* Ribbons */
 .gift-ribbon-h {
     position: absolute;
     top: 50%; left: 0;
-    width: 100%; height: 12px;
-    background: rgba(255,255,255,0.4);
+    width: 100%; height: 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
     transform: translateY(-50%);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .gift-ribbon-v {
     position: absolute;
     top: 0; left: 50%;
-    width: 12px; height: 100%;
-    background: rgba(255,255,255,0.4);
+    width: 14px; height: 100%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
     transform: translateX(-50%);
+    box-shadow: 1px 0 3px rgba(0,0,0,0.05);
 }
 
+/* Bow */
 .gift-emoji {
-    font-size: 1.6rem;
+    font-size: 2rem;
     z-index: 3;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    animation: bowFloat 3s ease-in-out infinite;
 }
 
+@keyframes bowFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-3px) rotate(5deg); }
+}
+
+/* Body */
 .gift-box-body {
     width: 100%;
-    background: linear-gradient(180deg, rgba(255, 230, 240, 0.2), rgba(243, 229, 245, 0.2));
+    background: linear-gradient(180deg,
+        rgba(255, 240, 245, 0.95),
+        rgba(255, 230, 240, 0.9),
+        rgba(248, 220, 235, 0.95));
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 200, 220, 0.2);
+    border: 2px solid rgba(255, 200, 220, 0.4);
     border-top: none;
-    border-radius: 5px 5px 15px 15px;
+    border-radius: 0 0 20px 20px;
     padding: 0;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), padding 0.5s ease;
-    box-shadow: 0 8px 25px rgba(255, 179, 193, 0.08);
+    transition: max-height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), padding 0.5s ease, box-shadow 0.3s ease;
+    box-shadow:
+        0 10px 30px rgba(255, 179, 193, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .gift-box.opened .gift-box-body {
     max-height: 600px;
-    padding: 25px 20px;
+    padding: 28px 22px;
+    box-shadow:
+        0 15px 40px rgba(255, 179, 193, 0.25),
+        inset 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
+/* Content */
 .gift-box-content h3 {
     font-family: 'Itim', cursive;
-    color: #ff4d6d;
-    font-size: 1.15rem;
-    margin-bottom: 12px;
+    color: #e8496a;
+    font-size: 1.2rem;
+    margin-bottom: 14px;
     text-align: center;
+    text-shadow: 0 1px 2px rgba(232, 73, 106, 0.1);
 }
 
 .gift-box-content p {
     font-size: 0.9rem;
-    line-height: 1.8;
-    color: #6d5a60;
+    line-height: 1.9;
+    color: #5a4a50;
     text-align: left;
 }
 
-.gift-box-label {
-    margin-top: 12px;
-    color: #ff758f;
-    font-size: 0.85rem;
+/* Coupon Tickets */
+.coupon-ticket {
+    display: flex;
+    align-items: stretch;
+    background: linear-gradient(135deg, #fff5f7, #ffe8ee, #fff0f3);
+    border-radius: 12px;
+    margin-top: 15px;
+    overflow: hidden;
+    box-shadow:
+        0 3px 10px rgba(255, 117, 143, 0.15),
+        0 1px 3px rgba(0,0,0,0.05);
+    border: 1.5px dashed rgba(255, 150, 180, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coupon-ticket:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 18px rgba(255, 117, 143, 0.25),
+        0 2px 5px rgba(0,0,0,0.08);
+}
+
+.coupon-left {
+    width: 80px;
+    min-height: 80px;
+    background: linear-gradient(135deg, #ff9ec4, #ff758f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.coupon-left::before,
+.coupon-left::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #fff0f3;
+    border-radius: 50%;
+    right: -8px;
+}
+
+.coupon-left::before { top: -8px; }
+.coupon-left::after { bottom: -8px; }
+
+.coupon-emoji {
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+}
+
+.coupon-perforation {
+    width: 0;
+    border-left: 2px dashed rgba(255, 150, 180, 0.4);
+    margin: 8px 0;
+}
+
+.coupon-right {
+    flex: 1;
+    padding: 12px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.coupon-right h4 {
+    font-family: 'Itim', cursive;
+    color: #e8496a;
+    font-size: 0.95rem;
+    margin: 0 0 5px 0;
+}
+
+.coupon-right p {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #7a6068;
+    margin: 0;
+}
+
+/* Used Coupon */
+.coupon-ticket.used {
     opacity: 0.6;
+    filter: grayscale(0.3);
+    position: relative;
+}
+
+.coupon-ticket.used::after {
+    content: '✓ ใช้แล้ว';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background: rgba(149, 225, 211, 0.9);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* Ticket Modal */
+.ticket-modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
     transition: opacity 0.3s ease;
 }
 
+.ticket-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.ticket-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.ticket-container {
+    position: relative;
+    z-index: 1;
+    transform: scale(0.8);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ticket-modal.active .ticket-container {
+    transform: scale(1);
+}
+
+.ticket-close {
+    position: absolute;
+    top: -15px; right: -15px;
+    width: 35px; height: 35px;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    color: #e8496a;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.ticket-close:hover { transform: scale(1.1); }
+
+.ticket {
+    display: flex;
+    align-items: stretch;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+    max-width: 380px;
+}
+
+.ticket-main {
+    flex: 1;
+    padding: 25px;
+    background: linear-gradient(135deg, #fff5f7, #ffe8ee);
+}
+
+.ticket-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.ticket-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff9ec4, #ff758f);
+    color: white;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.ticket-title {
+    font-family: 'Itim', cursive;
+    color: #e8496a;
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+.ticket-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ticket-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.ticket-desc {
+    font-size: 0.85rem;
+    color: #7a6068;
+    text-align: center;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.ticket-footer {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px dashed rgba(255, 150, 180, 0.4);
+    padding-top: 15px;
+}
+
+.ticket-info {
+    text-align: center;
+}
+
+.ticket-info span {
+    display: block;
+    font-size: 0.6rem;
+    color: #b08090;
+    letter-spacing: 1px;
+}
+
+.ticket-info strong {
+    font-size: 0.9rem;
+    color: #e8496a;
+}
+
+/* Perforation */
+.ticket-perforation {
+    width: 40px;
+    border-left: 3px dashed rgba(255, 150, 180, 0.5);
+    border-right: 3px dashed rgba(255, 150, 180, 0.5);
+    position: relative;
+    cursor: ns-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ticket-perforation::before,
+.ticket-perforation::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ticket-perforation::before { top: -12px; }
+.ticket-perforation::after { bottom: -12px; }
+
+/* Tear Progress */
+.tear-progress {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 0%;
+    background: linear-gradient(180deg, #ff758f, #ff4d6d);
+    border-radius: 2px;
+    transition: height 0.1s linear;
+    box-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+    z-index: 1;
+}
+
+/* Tear Hint */
+.tear-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.tear-arrow {
+    font-size: 1.4rem;
+    color: #e8496a;
+    animation: tearBounce 1.2s ease-in-out infinite;
+}
+
+.tear-hint small {
+    font-size: 0.55rem;
+    color: #e8496a;
+    font-weight: bold;
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 1px;
+}
+
+@keyframes tearBounce {
+    0%, 100% { transform: translateY(-3px); opacity: 1; }
+    50% { transform: translateY(3px); opacity: 0.6; }
+}
+
+/* Stub */
+.ticket-stub {
+    width: 100px;
+    background: linear-gradient(135deg, #ffc8dd, #ffafcc);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    gap: 15px;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.ticket-stub:active {
+    cursor: grabbing;
+}
+
+.stub-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.stub-emoji {
+    font-size: 1.5rem;
+}
+
+.stub-text {
+    text-align: center;
+}
+
+.stub-text span {
+    display: block;
+    font-size: 0.5rem;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 2px;
+}
+
+.stub-text strong {
+    font-size: 0.7rem;
+    color: #fff;
+    word-break: break-all;
+}
+
+/* Torn animation */
+.ticket-stub.torn {
+    transform: translateX(100%) rotate(15deg);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Label */
+.gift-box-label {
+    margin-top: 14px;
+    color: #ff758f;
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
 .gift-box.opened .gift-box-label { opacity: 0; }
+
+/* Shimmer effect on lid */
+.gift-box-lid::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    border-radius: inherit;
+    animation: lidShimmer 3s ease-in-out infinite;
+}
+
+@keyframes lidShimmer {
+    0%, 100% { left: -100%; }
+    50% { left: 100%; }
+}
 
 /* ============================================
    Flip Cards (Why I Love You)
@@ -989,6 +1411,48 @@ body {
 
     .music-btn { width: 44px; height: 44px; font-size: 1.2rem; }
     .music-control { bottom: 15px; right: 15px; }
+
+    .ticket { flex-direction: column; max-width: 320px; }
+    .ticket-main { padding: 20px; }
+    .ticket-perforation {
+        width: 100%;
+        height: 40px;
+        border-left: none;
+        border-right: none;
+        border-top: 3px dashed rgba(255, 150, 180, 0.5);
+        border-bottom: 3px dashed rgba(255, 150, 180, 0.5);
+        cursor: ew-resize;
+    }
+    .ticket-perforation::before,
+    .ticket-perforation::after {
+        top: 50%;
+        left: auto;
+        transform: translateY(-50%);
+    }
+    .ticket-perforation::before { left: -12px; top: 50%; }
+    .ticket-perforation::after { right: -12px; left: auto; top: 50%; }
+    .tear-progress {
+        width: 0%;
+        height: 4px !important;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+    }
+    .ticket-stub {
+        width: 100%;
+        flex-direction: row;
+        padding: 15px;
+    }
+    .ticket-stub.torn {
+        transform: translateY(100%) rotate(15deg);
+    }
+    .stub-content { flex-direction: row; gap: 12px; }
+    .tear-hint small {
+        writing-mode: horizontal-tb;
+    }
+    .tear-arrow {
+        transform: rotate(90deg);
+    }
 }
 
 @media (max-width: 480px) {

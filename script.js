@@ -83,7 +83,7 @@ wordleInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitGu
 // Hint Button — Dodge mechanic
 // ============================================
 const dodgeMessages = [
-    { emoji: '🤭', title: 'เอ๊ะ! ใจร้อนจัง' },
+    { emoji: '🤭', title: 'ม่ายให้กดหรอกก' },
     { emoji: '😝', title: 'จับไม่ได้หรอก!' },
     { emoji: '🙈', title: 'ว้าย! หนีทัน!' },
     { emoji: '💨', title: 'หายตัวได้!' },
@@ -268,8 +268,7 @@ if (twEl) typewriterObserver.observe(twEl.parentElement);
 // ============================================
 document.querySelectorAll('.gift-box').forEach(box => {
     box.addEventListener('click', () => {
-        if (box.classList.contains('opened')) return;
-        box.classList.add('opened');
+        box.classList.toggle('opened');
         const rect = box.getBoundingClientRect();
         createHeartBurst(rect.left + rect.width / 2, rect.top + rect.height / 3);
     });
@@ -295,6 +294,212 @@ explodeStyle.textContent = `@keyframes explode{0%{transform:translate(0,0) scale
 document.head.appendChild(explodeStyle);
 
 // ============================================
+// Ticket Modal
+// ============================================
+const ticketModal = document.getElementById('ticketModal');
+const ticketOverlay = document.getElementById('ticketOverlay');
+const ticketClose = document.getElementById('ticketClose');
+const ticketTitle = document.getElementById('ticketTitle');
+const ticketIcon = document.getElementById('ticketIcon');
+const ticketDesc = document.getElementById('ticketDesc');
+const stubEmoji = document.getElementById('stubEmoji');
+const stubCode = document.getElementById('stubCode');
+const ticketStub = document.getElementById('ticketStub');
+const tearHint = document.getElementById('tearHint');
+
+const couponData = {
+    0: { title: 'คูปองง้อ', emoji: '🥺', desc: 'ถ้าเค้าเริ่มงอนเมื่อไหร่ ยื่นใบนี้มา เค้าจะหายงอนเรยเจ๋งป่ะล่ะ', code: 'SORRY-2026' },
+    1: { title: 'คูปองเลี้ยงข้าวฟรี', emoji: '🍜', desc: 'อยากกินอารัยดั่ยหมด ยื่นมาเลย เดะเลี้ยงงับ', code: 'FOOD-2026' },
+    2: { title: 'คูปองกอดชาร์จพลัง', emoji: '🤗', desc: 'ใช้ได้ไม่จำกัดครั้ง ห้าห้าห้าาห้า', code: 'HUG-2026' }
+};
+
+const usedCoupons = new Set();
+let currentCouponIndex = -1;
+
+function closeTicket() {
+    ticketModal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+ticketOverlay.addEventListener('click', closeTicket);
+ticketClose.addEventListener('click', closeTicket);
+
+// Tear along perforation
+const ticketPerforation = document.getElementById('ticketPerforation');
+const tearProgress = document.getElementById('tearProgress');
+
+let isDragging = false;
+let startY = 0;
+let startX = 0;
+let animFrame = null;
+let currentProgress = 0;
+let targetProgress = 0;
+const TEAR_THRESHOLD = 120;
+const SMOOTHING = 0.15;
+
+function getPos(e) {
+    if (e.touches && e.touches.length > 0) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+}
+
+function onStart(e) {
+    if (ticketStub.classList.contains('torn')) return;
+    if (usedCoupons.has(currentCouponIndex)) return;
+    isDragging = true;
+    const pos = getPos(e);
+    startY = pos.y;
+    startX = pos.x;
+    if (animFrame) cancelAnimationFrame(animFrame);
+    animate();
+}
+
+function onMove(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    const isMobile = window.innerWidth <= 768;
+
+    // Track distance along the perforation axis
+    let distance;
+    if (isMobile) {
+        // Horizontal perforation - track horizontal movement
+        distance = Math.abs(pos.x - startX);
+    } else {
+        // Vertical perforation - track vertical movement
+        distance = Math.abs(pos.y - startY);
+    }
+
+    targetProgress = Math.min(distance / TEAR_THRESHOLD, 1);
+}
+
+function onEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+
+    if (currentProgress < 1) {
+        targetProgress = 0;
+    }
+}
+
+function animate() {
+    currentProgress += (targetProgress - currentProgress) * SMOOTHING;
+
+    if (Math.abs(currentProgress - targetProgress) < 0.001 && !isDragging) {
+        currentProgress = targetProgress;
+    }
+
+    const progress = currentProgress;
+    const eased = progress < 1 ? progress * progress * (3 - 2 * progress) : 1;
+    const isMobile = window.innerWidth <= 768;
+
+    // Progress bar on perforation
+    if (isMobile) {
+        tearProgress.style.width = (eased * 100) + '%';
+        tearProgress.style.height = '4px';
+    } else {
+        tearProgress.style.height = (eased * 100) + '%';
+    }
+
+    // Stub moves away
+    const move = eased * 60;
+    const rotate = eased * 8;
+    if (isMobile) {
+        ticketStub.style.transform = `translateY(${move}px) rotate(${rotate}deg)`;
+    } else {
+        ticketStub.style.transform = `translateX(${move}px) rotate(${rotate}deg)`;
+    }
+    ticketStub.style.opacity = 1 - eased * 0.4;
+
+    // Fade hint
+    tearHint.style.opacity = Math.max(0, 1 - progress * 3);
+
+    if (progress >= 0.98 && isDragging) {
+        isDragging = false;
+        currentProgress = 1;
+        targetProgress = 1;
+        ticketStub.classList.add('torn');
+        tearHint.style.display = 'none';
+
+        // Mark as used
+        if (currentCouponIndex >= 0) {
+            usedCoupons.add(currentCouponIndex);
+            const couponEl = document.querySelectorAll('.coupon-ticket')[currentCouponIndex];
+            if (couponEl) couponEl.classList.add('used');
+        }
+
+        setTimeout(() => {
+            if (isMobile) {
+                ticketStub.style.transform = 'translateY(120%) rotate(15deg)';
+            } else {
+                ticketStub.style.transform = 'translateX(120%) rotate(15deg)';
+            }
+            ticketStub.style.opacity = '0';
+        }, 50);
+
+        createHeartBurst(
+            ticketStub.getBoundingClientRect().left + ticketStub.offsetWidth / 2,
+            ticketStub.getBoundingClientRect().top + ticketStub.offsetHeight / 2
+        );
+        return;
+    }
+
+    if (isDragging || Math.abs(currentProgress - targetProgress) > 0.001) {
+        animFrame = requestAnimationFrame(animate);
+    }
+}
+
+// Events on perforation area
+ticketPerforation.addEventListener('mousedown', onStart);
+ticketPerforation.addEventListener('touchstart', onStart, { passive: true });
+document.addEventListener('mousemove', onMove);
+document.addEventListener('touchmove', onMove, { passive: false });
+document.addEventListener('mouseup', onEnd);
+document.addEventListener('touchend', onEnd);
+
+// Open ticket
+document.querySelectorAll('.coupon-ticket').forEach((coupon, index) => {
+    coupon.addEventListener('click', () => {
+        const data = couponData[index];
+        if (!data) return;
+
+        currentCouponIndex = index;
+        ticketTitle.textContent = data.title;
+        ticketIcon.textContent = data.emoji;
+        ticketDesc.textContent = data.desc;
+        stubEmoji.textContent = data.emoji;
+        stubCode.textContent = data.code;
+
+        const isUsed = usedCoupons.has(index);
+
+        if (isUsed) {
+            // Already used - show torn state
+            ticketStub.classList.add('torn');
+            ticketStub.style.transform = 'translateX(120%) rotate(15deg)';
+            ticketStub.style.opacity = '0';
+            tearHint.style.display = 'none';
+            tearProgress.style.height = '100%';
+            tearProgress.style.width = '100%';
+        } else {
+            // Not used - reset state
+            ticketStub.classList.remove('torn');
+            ticketStub.style.transform = '';
+            ticketStub.style.opacity = '';
+            tearHint.style.display = '';
+            tearHint.style.opacity = '';
+            tearProgress.style.height = '0%';
+            tearProgress.style.width = '0%';
+            currentProgress = 0;
+            targetProgress = 0;
+        }
+
+        ticketModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+});
+
+// ============================================
 // Flip Cards
 // ============================================
 document.querySelectorAll('.flip-card').forEach(card => {
@@ -309,6 +514,7 @@ function initMusic() {
     const musicBtn = document.getElementById('musicBtn');
     if (!bgMusic || !musicBtn) return;
 
+    bgMusic.volume = 0.1;
     let isPlaying = false;
 
     // Try auto-play after Wordle unlock (user interaction already happened)
